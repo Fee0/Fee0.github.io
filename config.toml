@@ -1,5 +1,5 @@
 # The URL the site will be built for
-base_url = "https://fee0.github.io/Blog"
+base_url = "https://fee0.github.io"
 
 title = "Asdf"
 generate_feeds = true
@@ -20,7 +20,7 @@ fancy_code = true
 
 socials = [
   { name = "twitter", url = "https://twitter.com/not_matthias", icon = "twitter" },
-  { name = "github", url = "https://github.com/not-matthias/", icon = "github" },
+  { name = "github", url = "https://github.com/Fee0/", icon = "github" },
 ]
 menu = [
     { name = "/posts", url = "/posts", weight = 1 },
