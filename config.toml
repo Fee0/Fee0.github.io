@@ -1,7 +1,7 @@
 # The URL the site will be built for
 base_url = "https://peukert.io"
 
-title = "Asdf"
+title = "Frederik Peukert"
 generate_feeds = true
 compile_sass = true
 
@@ -15,7 +15,7 @@ highlight_code = false
 
 [extra]
 toc = true
-theme = "toggle"
+theme = "dark"
 fancy_code = true
 
 socials = [
