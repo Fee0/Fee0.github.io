@@ -19,7 +19,7 @@ theme = "toggle"
 fancy_code = true
 
 socials = [
-  { name = "twitter", url = "https://twitter.com/not_matthias", icon = "twitter" },
+ # { name = "twitter", url = "https://twitter.com/not_matthias", icon = "twitter" },
   { name = "github", url = "https://github.com/Fee0/", icon = "github" },
 ]
 menu = [
