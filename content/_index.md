@@ -17,6 +17,6 @@ I'm using this blog to learn and organize things in my brain more clearly using 
 3. Refine and simplify
 4. Repeat until you can explain a topic in simple terms
 
----
+<!-- --- -->
 
-Copyright © 2024 Frederik Peukert
+<!-- Copyright © 2024 Frederik Peukert -->
