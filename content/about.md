@@ -1,4 +1,4 @@
 +++
-title = "About"
+title = "Me"
 path = "about"
 +++
