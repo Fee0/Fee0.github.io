@@ -50,7 +50,7 @@ $~$
 <!-- <div style="margin-left: 25%; margin-right: auto;"> -->
 <div align="center">
 
-| Pro                     | Con                    |
+| Con                     | Pro                    |
 | ----------------------- | ---------------------- |
 | Binary size             | Compiler optimizations |
 | Compile time            | No dynamic dispatch    |
