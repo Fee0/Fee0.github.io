@@ -50,12 +50,12 @@ $~$
 <!-- <div style="margin-left: 25%; margin-right: auto;"> -->
 <div align="center">
 
-| Con                     | Pro                    |
-| ----------------------- | ---------------------- |
-| Binary size             | Compiler optimizations |
-| Compile time            | No dynamic dispatch    |
-| Cache efficiency        |
-| Cannot be exported      |
+| Con                | Pro                    |
+| ------------------ | ---------------------- |
+| Binary size        | Compiler optimizations |
+| Compile time       | No dynamic dispatch    |
+| Cache efficiency   |
+| Cannot be exported |
 
 <!-- <center> -->
 
