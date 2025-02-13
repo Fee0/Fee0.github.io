@@ -14,7 +14,7 @@ Many languages offer generics, which provide a lot of convenience: There is no n
 Monomorphization is the process of generating specialized versions of generic code for each concrete type used. So, whenever a concrete type is used to instantiate generic code, a new copy of all the code that uses the generic is created. For example, we have a function with a generic parameter `T`:
 
 ```rust,
-fn print<T>(value: T) {
+fn print<T: ToString>(value: T) {
     println!("{}", value.to_string())
 }
 ```
