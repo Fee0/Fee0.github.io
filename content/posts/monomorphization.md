@@ -82,4 +82,19 @@ fn _with_extension(&self, extension: &OsStr) -> PathBuf {
 
 The generic code is encapsulated in `with_extension()` and gets resolved into a concrete data type. This type can be used to call the complex part of the function that resides inside another function. In this case, the compiler can only use monomorphization for `with_extension()` and does not need to copy `_with_extension`. However, the compiler may choose to inline functions which could revert the effects of separating generic and non-generic code. Therefore, `#[inline(never)]` can help to tell the compiler to not inline a function.
 
-<!-- {{ note(header="Note!", body="This blog assumes basic terminal maturity") }} -->
+# Tracking
+
+It might be useful to track how many copies of a function exist. A useful tool for this is for example [llvm-lines](https://github.com/dtolnay/cargo-llvm-lines) which allows to see the number of copies, as well as their size. Using the example of the [generic print function](#Generics-and-Monomorphization) we can see the three copies created, one for each argument.
+
+```
+▶ cargo llvm-lines --release
+
+  Lines               Copies            Function name
+  -----               ------            -------------
+  2026                54                (TOTAL)
+   303 (15.0%, 15.0%)  1 (1.9%,  1.9%)  alloc::raw_vec::RawVecInner<A>::grow_amortized
+   282 (13.9%, 28.9%)  1 (1.9%,  3.7%)  alloc::alloc::Global::grow_impl
+   158 (7.8%, 36.7%)   1 (1.9%,  5.6%)  alloc::raw_vec::RawVecInner<A>::try_allocate_in
+   143 (7.1%, 43.7%)   3 (5.6%, 11.1%)  monomorphization::print
+   ...
+```
