@@ -84,7 +84,7 @@ The generic code is encapsulated in `with_extension()` and gets resolved into a 
 
 # Tracking
 
-It might be useful to track how many copies of a function exist. A useful tool for this is for example [llvm-lines](https://github.com/dtolnay/cargo-llvm-lines) which allows to see the number of copies, as well as their size. Using the example of the [generic print function](#Generics-and-Monomorphization) we can see the three copies created, one for each argument.
+It might be useful to track how many copies of a function exist. A useful tool for this is for example [llvm-lines](https://github.com/dtolnay/cargo-llvm-lines) which allows to see the number of copies, as well as their size. Using the example of the [generic print function](#generics-and-monomorphization) we can see the three copies created, one for each argument.
 
 ```
 ▶ cargo llvm-lines --release
