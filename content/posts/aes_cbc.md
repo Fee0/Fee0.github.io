@@ -1,6 +1,6 @@
 +++
 title = "AES-CBC: How to not shoot yourself in the foot"
-date = "2024-11-10"
+date = "2025-02-19"
 
 [extra]
 repo_view = false
