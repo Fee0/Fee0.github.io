@@ -10,7 +10,7 @@ I love security, Rust, and all low-level things :-)
 
 # _Feynman Technique_
 
-I'm using this blog to learn and organize things in my brain more clearly using the _Feynman Technique_ named after the famous physician [Richard Feynman](https://en.wikipedia.org/wiki/Richard_Feynman):
+I'm using this blog to learn and organize things in my brain more clearly using the [_Feynman Technique_](https://fs.blog/feynman-technique/):
 
 1. Pretend to teach a topic to a child (or write it down)
 2. Identify knowledge gaps and fill them
