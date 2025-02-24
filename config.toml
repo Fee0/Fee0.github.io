@@ -10,7 +10,9 @@ compile_sass = true
 build_search_index = false
 
 theme = "apollo"
-taxonomies = [{ name = "tags" }]
+# taxonomies = [{ name = "tags" }]
+
+generate_sitemap = true #for search engines
 
 [markdown]
 render_emoji = false
@@ -32,6 +34,7 @@ fancy_code = true
 dynamic_note = true
 mathjax = true
 mathjax_dollar_inline_enable = true
+slugify_urls = "on"
 
 socials = [
  # { name = "twitter", url = "https://twitter.com/not_matthias", icon = "twitter" },
