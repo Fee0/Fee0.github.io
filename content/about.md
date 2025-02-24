@@ -1,4 +1,0 @@
-+++
-title = "Me"
-path = "about"
-+++
