@@ -1,6 +1,7 @@
 +++
 title = "Monomorphization in Rust"
 date = "2024-11-10"
+keywords = ["Monomorphization","Rust","trick"]
 
 [extra]
 repo_view = false

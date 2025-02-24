@@ -1,6 +1,7 @@
 +++
 title = "Matching newtypes in function parameters"
 date = "2025-02-20"
+keywords = ["newtype","Rust","trick"]
 
 [extra]
 repo_view = false

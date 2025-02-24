@@ -1,7 +1,7 @@
 +++
 title = "AES-CBC: How to not shoot yourself in the foot"
 #description = "How to use AES-CBC without shooting yourself in the foot"
-keywords = ["AES","CBC","AEAD","Attack","Padding","cryptographie","crypto","encryption","authentication",]
+keywords = ["AES","CBC","AEAD","Attack","Padding","cryptographie","crypto","encryption","authentication","IV"]
 date = "2025-02-19"
 
 [extra]

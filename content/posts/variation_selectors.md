@@ -1,6 +1,7 @@
 +++
 title = "Hiding code inside identifier"
 date = "2025-02-21"
+keywords = ["javascript","variation","selector","unicode","hack","hiding","identifier"]
 
 [extra]
 repo_view = false

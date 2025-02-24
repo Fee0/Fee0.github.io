@@ -1,6 +1,7 @@
 +++
 title = "How to store passwords"
 date = "2025-02-15"
+keywords = ["password","store","encryption","hash","salt","bcrypt","sso"]
 
 [extra]
 repo_view = false
