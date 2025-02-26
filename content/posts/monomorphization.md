@@ -44,7 +44,7 @@ Monomorphization has different consequences. The most important benefit of this 
 
 However, there are also some drawbacks. Copying the code will result in a bigger binary. Depending on the size of the function and the number of invocations with different types, this can cause the binary size to explode. The copying step will also increase the compile time. Further, cache efficiency will suffer as there is not one function anymore but many that are potentially also scattered in memory. Lastly, this approach requires that all users of the generic type are known at compile time. This is a problem e.g., if generic code is supposed to be exported from a shared library. The user of the shared library might now want to use the generic with a type where no instance exists. That's why generics in exported functions are generally not supported.
 
-Different crates also create their own instances of generics. That means crate `A` and crate `B` can both instantiate a `Vec<String>` which would create two copies even though the type is the same. This problem was partially solved with the introduction of [shared generics](https://github.com/rust-lang/rust/issues/47317#issuecomment-478894318) where monomorphized code can be shared between crates.
+Different crates also create their own instances of generics. That means crate `A` and crate `B` can both instantiate a `Vec<String>` which would create two copies even though the type is the same. This problem was partially solved with the introduction of [shared generics](https://github.com/rust-lang/rust/issues/47317) where monomorphized code can be shared between crates.
 
 $~$
 
