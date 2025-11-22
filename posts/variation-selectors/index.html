@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<html class="dark light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    
+    
+    
+    <title>
+         Hiding code inside identifier
+        
+    </title>
+
+        
+            <meta property="og:title" content="Hiding code inside identifier" />
+        
+     
+
+     
+         
+     
+
+     
+         
+    
+
+    
+    
+
+    
+    
+        <link href=https://peukert.io/fonts.css rel="stylesheet" />
+    
+
+    
+    
+
+    
+    
+        <script src=https://peukert.io/js/codeblock.js></script>
+    
+
+    
+    
+    
+    
+    
+        <script src=https://peukert.io/js/note.js></script>
+    
+
+    
+        
+            <script>
+            MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+              }
+            };
+            </script>
+        
+        <script type="text/javascript" id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Frederik Peukert" href="https://peukert.io/atom.xml">
+
+
+    
+    
+        <link rel="stylesheet" type="text/css" href="https://peukert.io/theme/dark.css" />
+    
+
+    <!-- Set the correct theme in the script -->
+    <script src=https://peukert.io/js/themetoggle.js></script>
+    
+        <script>setTheme("dark");</script>
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href=https://peukert.io/main.css />
+
+    
+</head>
+
+
+<body>
+    <div class="content">
+        <header>
+    <div class="main">
+        <a href=https:&#x2F;&#x2F;peukert.io>Frederik Peukert</a>
+
+        <div class="socials">
+            
+            <a rel="me" href="mailto:frederik@peukert.io" class="social">
+                <img alt=email src=https://peukert.io/social_icons/email.svg>
+            </a>
+            
+        </div>
+    </div>
+
+    <nav>
+        
+        <a href=https://peukert.io/posts style="margin-left: 0.5em">posts</a>
+        
+        <a href=https://peukert.io style="margin-left: 0.5em">about</a>
+        
+
+        
+    </nav>
+</header>
+
+
+        
+        
+
+<main>
+    <article>
+        <div class="title">
+            
+            
+    <div class="page-header">
+        Hiding code inside identifier<span class="primary-color" style="font-size: 1.6em">.</span>
+    </div>
+
+
+                <div class="meta">
+                    
+                        Posted on <time>2025-02-21</time>
+                    
+
+                    
+
+                    
+
+                    
+                    
+
+                    
+                    
+
+                    
+
+                </div>
+        </div>
+
+        
+
+        
+        
+
+        <section class="body">
+            <h1 id="unicode"><a class="zola-anchor" href="#unicode" aria-label="Anchor link for: unicode">Unicode</a></h1>
+<p><a href="https://www.unicode.org/versions/Unicode16.0.0/UnicodeStandard-16.0.pdf">Unicode</a> maps codepoints to characters. E.g., U+0041 -&gt; A. While some characters map directly to one codepoint, some scripts, e.g., Devanagari, require multiple codepoints per character. To accommodate all of the world's writing systems, Unicode includes code points supporting the combination of characters or fine variations of characters in different scripts.</p>
+<!-- There are many cool [codepoints](https://github.com/Codepoints/awesome-codepoints).  -->
+<p>To create variations of a character without assigning each variation a new code point, Unicode introduced <a href="https://en.wikipedia.org/wiki/Variation_Selectors_Supplement">Variation Selectors</a> (VS-1 to VS-256). Variation selectors modify the appearance of preceding characters but have no visual representation themselves. One use case is to force some characters to be in text or emoji style.</p>
+<pre data-lang="javascript" style="background-color:#0f1419;color:#bfbab0;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="font-style:italic;color:#39bae6;">console</span><span style="color:#f29668;">.</span><span style="color:#f07178;">log</span><span>(</span><span style="font-style:italic;color:#39bae6;">String</span><span style="color:#f29668;">.</span><span style="color:#ffb454;">fromCodePoint</span><span>(</span><span style="color:#f29718;">0x2615</span><span>))</span><span style="color:#bfbab0cc;">;         </span><span style="font-style:italic;color:#5c6773;">// ☕ Default (may appear as text or emoji)
+</span><span style="font-style:italic;color:#39bae6;">console</span><span style="color:#f29668;">.</span><span style="color:#f07178;">log</span><span>(</span><span style="font-style:italic;color:#39bae6;">String</span><span style="color:#f29668;">.</span><span style="color:#ffb454;">fromCodePoint</span><span>(</span><span style="color:#f29718;">0x2615</span><span style="color:#bfbab0cc;">, </span><span style="color:#f29718;">0xFE0E</span><span>))</span><span style="color:#bfbab0cc;">; </span><span style="font-style:italic;color:#5c6773;">// ☕︎ Forces text style
+</span><span style="font-style:italic;color:#39bae6;">console</span><span style="color:#f29668;">.</span><span style="color:#f07178;">log</span><span>(</span><span style="font-style:italic;color:#39bae6;">String</span><span style="color:#f29668;">.</span><span style="color:#ffb454;">fromCodePoint</span><span>(</span><span style="color:#f29718;">0x2615</span><span style="color:#bfbab0cc;">, </span><span style="color:#f29718;">0xFE0F</span><span>))</span><span style="color:#bfbab0cc;">; </span><span style="font-style:italic;color:#5c6773;">// ☕️ Forces emoji style
+</span></code></pre>
+<p>Variation selectors are supposed to be preserved even if their meaning is unknown to a system in order for Unicode to be backward compatible. Unicode does not seem to define a maximum of variation selectors for one base character either.</p>
+<h1 id="encoding-into-variation-selectors"><a class="zola-anchor" href="#encoding-into-variation-selectors" aria-label="Anchor link for: encoding-into-variation-selectors">Encoding into Variation Selectors</a></h1>
+<p>Given the properties of variation selectors, we could add arbitrary data to a base character by mapping the data to the different variation selectors. Most systems will carry this unknown data around without modifying it. </p>
+<p>Since we have exactly 256 variation selectors, we can assign a byte value to each selector and use this as a way to encode arbitrary data after each Unicode character. Variation selectors exist in two codepoint ranges: 16 in <code>U+FE00</code> to <code>U+FE0F</code> and 240 in <code>U+E0100</code> to <code>U+E01EF</code>. If we combine both ranges when mapping to byte values, we are going to end up with a mapping like this:</p>
+<center>
+<table><thead><tr><th>Variation Selector</th><th>Code Point  </th><th>Byte    </th></tr></thead><tbody>
+<tr><td>VS-1              </td><td>U+FE00      </td><td>0x00      </td></tr>
+<tr><td>VS-2              </td><td>U+FE01      </td><td>0x01      </td></tr>
+<tr><td>....              </td><td>....        </td><td>....                </td></tr>
+<tr><td>VS-15            </td><td>U+FE0E      </td><td>0x0E      </td></tr>
+<tr><td>VS-16            </td><td>U+FE0F      </td><td>0x0F      </td></tr>
+<tr><td>VS-17            </td><td>U+E0100    </td><td>0x10</td></tr>
+<tr><td>VS-18            </td><td>U+E0101    </td><td>0x11</td></tr>
+<tr><td>...              </td><td>...        </td><td>...                  </td></tr>
+<tr><td>VS-256            </td><td>U+E01EF    </td><td>0xFF</td></tr>
+</tbody></table>
+</center>
+<center>
+Mapping Code Points to Bytes
+</center>
+<p>Using this mapping we can encode arbitrary bytes using the different variation selectors. If the variation selectors have no meaning for the base character, there will be no visual indication of our appended data.</p>
+<h1 id="embedding-hidden-data-in-strings"><a class="zola-anchor" href="#embedding-hidden-data-in-strings" aria-label="Anchor link for: embedding-hidden-data-in-strings">Embedding hidden data in strings</a></h1>
+<p>Storing arbitrary data after a character is an interesting property that could have many applications. Maybe the first idea that comes to mind is to use it to send hidden messages like <a href="https://github.com/KuroLabs/stegcloak">StegCloack</a> is doing. </p>
+<p>However, I wanted to test how variation selectors behave inside programming languages that support Unicode. We are going to use JavaScript for this to encode a message into a character.</p>
+<p>First, we need to encode a hidden message by appending variation selectors to a base character.</p>
+<pre data-lang="javascript" style="background-color:#0f1419;color:#bfbab0;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#ff7733;">function </span><span style="color:#ffb454;">encode</span><span>(</span><span style="color:#f29718;">baseChar</span><span style="color:#bfbab0cc;">, </span><span style="color:#f29718;">stringData</span><span>) {
+</span><span>    </span><span style="color:#ff7733;">let </span><span>result </span><span style="color:#f29668;">= </span><span>baseChar</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span>    </span><span style="color:#ff7733;">for </span><span>(</span><span style="color:#ff7733;">let </span><span>char </span><span style="color:#f29668;">of </span><span>stringData) {
+</span><span>        </span><span style="color:#ff7733;">let </span><span>byte </span><span style="color:#f29668;">= </span><span>char</span><span style="color:#f29668;">.</span><span style="color:#f07178;">charCodeAt</span><span>(</span><span style="color:#f29718;">0</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span>        result </span><span style="color:#f29668;">+= </span><span>(byte </span><span style="color:#f29668;">&lt; </span><span style="color:#f29718;">16</span><span>) 
+</span><span>            </span><span style="color:#f29668;">? </span><span style="font-style:italic;color:#39bae6;">String</span><span style="color:#f29668;">.</span><span style="color:#ffb454;">fromCodePoint</span><span>(</span><span style="color:#f29718;">0xFE00 </span><span style="color:#f29668;">+ </span><span>byte) 
+</span><span>            </span><span style="color:#f29668;">: </span><span style="font-style:italic;color:#39bae6;">String</span><span style="color:#f29668;">.</span><span style="color:#ffb454;">fromCodePoint</span><span>(</span><span style="color:#f29718;">0xE0100 </span><span style="color:#f29668;">+ </span><span>(byte </span><span style="color:#f29668;">- </span><span style="color:#f29718;">16</span><span>))</span><span style="color:#bfbab0cc;">;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#ff7733;">return </span><span>result</span><span style="color:#bfbab0cc;">;
+</span><span>}
+</span></code></pre>
+<p>The <code>baseChar</code> can be a Unicode character like &quot;a&quot;, &quot;b&quot;, or &quot;😀󠅜󠅟󠅜&quot; etc. As long as the variation selectors don't modify the base character it's fine.</p>
+<pre data-lang="javascript" style="background-color:#0f1419;color:#bfbab0;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#ff7733;">let </span><span>emoji </span><span style="color:#f29668;">= </span><span style="color:#ffb454;">encode</span><span>(</span><span style="color:#c2d94c;">&quot;😀&quot;</span><span style="color:#bfbab0cc;">, </span><span style="color:#c2d94c;">&quot;hello hidden world!&quot;</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span style="font-style:italic;color:#39bae6;">console</span><span style="color:#f29668;">.</span><span style="color:#f07178;">log</span><span>(emoji)</span><span style="color:#bfbab0cc;">;
+</span></code></pre>
+<p>The resulting <code>emoji</code> has the string <code>&quot;hello hidden world!&quot;</code> appended, encoded as variation selectors. You cannot see them. But if you e.g., copy the smiley, you will copy the variation selectors too.</p>
+<p>Now, let’s decode the hidden message again:</p>
+<pre data-lang="javascript" style="background-color:#0f1419;color:#bfbab0;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#ff7733;">function </span><span style="color:#ffb454;">decode</span><span>(</span><span style="color:#f29718;">input</span><span>) {
+</span><span>    </span><span style="color:#ff7733;">let </span><span>result </span><span style="color:#f29668;">= </span><span>[]</span><span style="color:#bfbab0cc;">;
+</span><span>    </span><span style="color:#ff7733;">let </span><span>startedDecoding </span><span style="color:#f29668;">= </span><span style="color:#f29718;">false</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span>    </span><span style="color:#ff7733;">for </span><span>(</span><span style="color:#ff7733;">let </span><span>char </span><span style="color:#f29668;">of </span><span>input) {
+</span><span>        </span><span style="color:#ff7733;">const </span><span>codePoint </span><span style="color:#f29668;">= </span><span>char</span><span style="color:#f29668;">.</span><span style="color:#ffb454;">codePointAt</span><span>(</span><span style="color:#f29718;">0</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span>        </span><span style="color:#ff7733;">let </span><span>byte </span><span style="color:#f29668;">= </span><span style="color:#f29718;">null</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span>        </span><span style="color:#ff7733;">if </span><span>(codePoint </span><span style="color:#f29668;">&gt;= </span><span style="color:#f29718;">0xFE00 </span><span style="color:#f29668;">&amp;&amp; </span><span>codePoint </span><span style="color:#f29668;">&lt;= </span><span style="color:#f29718;">0xFE0F</span><span>) {
+</span><span>            byte </span><span style="color:#f29668;">= </span><span>codePoint </span><span style="color:#f29668;">- </span><span style="color:#f29718;">0xFE00</span><span style="color:#bfbab0cc;">;
+</span><span>        } </span><span style="color:#ff7733;">else if </span><span>(codePoint </span><span style="color:#f29668;">&gt;= </span><span style="color:#f29718;">0xE0100 </span><span style="color:#f29668;">&amp;&amp; </span><span>codePoint </span><span style="color:#f29668;">&lt;= </span><span style="color:#f29718;">0xE01EF</span><span>) {
+</span><span>            byte </span><span style="color:#f29668;">= </span><span>codePoint </span><span style="color:#f29668;">- </span><span style="color:#f29718;">0xE0100 </span><span style="color:#f29668;">+ </span><span style="color:#f29718;">16</span><span style="color:#bfbab0cc;">;
+</span><span>        }
+</span><span>
+</span><span>        </span><span style="color:#ff7733;">if </span><span>(byte </span><span style="color:#f29668;">!== </span><span style="color:#f29718;">null</span><span>) {
+</span><span>            result</span><span style="color:#f29668;">.</span><span style="color:#f07178;">push</span><span>(byte)</span><span style="color:#bfbab0cc;">;
+</span><span>            startedDecoding </span><span style="color:#f29668;">= </span><span style="color:#f29718;">true</span><span style="color:#bfbab0cc;">;
+</span><span>        } </span><span style="color:#ff7733;">else if </span><span>(startedDecoding) {
+</span><span>            </span><span style="color:#ff7733;">break</span><span style="color:#bfbab0cc;">; </span><span style="font-style:italic;color:#5c6773;">// Stop decoding after encountering a non-variation selector
+</span><span>        }
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#ff7733;">return </span><span>result</span><span style="color:#bfbab0cc;">;
+</span><span>}
+</span></code></pre>
+<p>The <code>decode()</code> function will skip the first base character and then decode variation selectors as long as there is no non-variation-selector. The output is a byte array which we convert back into a string with <code>String.FromCharCode()</code>:</p>
+<pre data-lang="javascript" style="background-color:#0f1419;color:#bfbab0;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#ff7733;">let </span><span>bytes </span><span style="color:#f29668;">= </span><span style="color:#ffb454;">decode</span><span>(emoji)</span><span style="color:#bfbab0cc;">;
+</span><span style="font-style:italic;color:#39bae6;">console</span><span style="color:#f29668;">.</span><span style="color:#f07178;">log</span><span>(</span><span style="font-style:italic;color:#39bae6;">String</span><span style="color:#f29668;">.</span><span style="color:#f07178;">fromCharCode</span><span>(</span><span style="color:#f29668;">...</span><span>bytes))</span><span style="color:#bfbab0cc;">;
+</span></code></pre>
+<p>When we print the output, we get the original message: <code>&quot;hello hidden world!&quot;</code>. Instead of encoding a random message, we can also encode JavaScript code and <code>eval()</code> it:</p>
+<pre data-lang="javascript" style="background-color:#0f1419;color:#bfbab0;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#ff7733;">let </span><span>emoji </span><span style="color:#f29668;">= </span><span style="color:#ffb454;">encode</span><span>(</span><span style="color:#c2d94c;">&quot;😀&quot;</span><span style="color:#bfbab0cc;">, </span><span style="color:#c2d94c;">&quot;console.log(</span><span style="color:#95e6cb;">\&quot;</span><span style="color:#c2d94c;">hello hidden world!</span><span style="color:#95e6cb;">\&quot;</span><span style="color:#c2d94c;">)&quot;</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#ff7733;">let </span><span>bytes </span><span style="color:#f29668;">= </span><span style="color:#ffb454;">decode</span><span>(emoji)</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#f07178;">eval</span><span>(</span><span style="font-style:italic;color:#39bae6;">String</span><span style="color:#f29668;">.</span><span style="color:#f07178;">fromCharCode</span><span>(</span><span style="color:#f29668;">...</span><span>bytes))
+</span></code></pre>
+<p>This is cool because we can hide now arbitrary amounts of code inside single characters and at runtime we can decode and execute it again. </p>
+<h1 id="embedding-hidden-data-in-identifier"><a class="zola-anchor" href="#embedding-hidden-data-in-identifier" aria-label="Anchor link for: embedding-hidden-data-in-identifier">Embedding hidden data in identifier</a></h1>
+<p>JavaScript does not only support Unicode in Strings but also for identifiers.
+Let’s choose a random character where we hide the JavaScript and print it:</p>
+<pre data-lang="javascript" style="background-color:#0f1419;color:#bfbab0;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#ff7733;">let </span><span>a </span><span style="color:#f29668;">= </span><span style="color:#ffb454;">encode</span><span>(</span><span style="color:#c2d94c;">&quot;a&quot;</span><span style="color:#bfbab0cc;">, </span><span style="color:#c2d94c;">&quot;console.log(</span><span style="color:#95e6cb;">\&quot;</span><span style="color:#c2d94c;">hello hidden world!</span><span style="color:#95e6cb;">\&quot;</span><span style="color:#c2d94c;">)&quot;</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span style="font-style:italic;color:#39bae6;">console</span><span style="color:#f29668;">.</span><span style="color:#f07178;">log</span><span>(</span><span style="font-style:italic;color:#39bae6;">String</span><span style="color:#f29668;">.</span><span style="color:#f07178;">fromCharCode</span><span>(</span><span style="color:#f29668;">...</span><span>a))</span><span style="color:#bfbab0cc;">;
+</span></code></pre>
+<p>Now we can copy the symbol <code>a󠅓󠅟󠅞󠅣󠅟󠅜󠅕󠄞󠅜󠅟󠅗󠄘󠄒󠅘󠅕󠅜󠅜󠅟󠄐󠅘󠅙󠅔󠅔󠅕󠅞󠄐󠅧󠅟󠅢󠅜󠅔󠄑󠄒󠄙</code> from our console with Unicode support (you can copy it from here too) and use it as an identifier inside our JavaScript code. To decode the hidden script, we need to get the name of the identifier. There seems to be no direct way to do this, but, we can do it by placing the identifier inside an object and accessing the first key via <code>Object.keys()</code>. Now we can get the identifier name, decode it, and execute it.</p>
+<pre data-lang="javascript" style="background-color:#0f1419;color:#bfbab0;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#ff7733;">let </span><span>obj </span><span style="color:#f29668;">= </span><span>{ a󠅓󠅟󠅞󠅣󠅟󠅜󠅕󠄞󠅜󠅟󠅗󠄘󠄒󠅘󠅕󠅜󠅜󠅟󠄐󠅘󠅙󠅔󠅔󠅕󠅞󠄐󠅧󠅟󠅢󠅜󠅔󠄑󠄒󠄙 </span><span style="color:#bfbab0cc;">: </span><span style="color:#f29718;">1 </span><span>}</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#ff7733;">let </span><span>varName </span><span style="color:#f29668;">= </span><span style="font-style:italic;color:#39bae6;">Object</span><span style="color:#f29668;">.</span><span style="color:#f07178;">keys</span><span>(obj)[</span><span style="color:#f29718;">0</span><span>]</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#ff7733;">let </span><span>bytes </span><span style="color:#f29668;">= </span><span style="color:#ffb454;">decode</span><span>(varName)</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#f07178;">eval</span><span>(</span><span style="font-style:italic;color:#39bae6;">String</span><span style="color:#f29668;">.</span><span style="color:#f07178;">fromCharCode</span><span>(</span><span style="color:#f29668;">...</span><span>bytes))</span><span style="color:#bfbab0cc;">; </span><span style="font-style:italic;color:#5c6773;">// prints: &quot;hello hidden world!&quot;
+</span></code></pre>
+<p>This will print <code>&quot;hello hidden world!&quot;</code> which means we can hide arbitrary amount of JavaScript inside identifiers. This should work for other script languages too that allow to access variable names and allow Unicode in identifiers. Hiding code inside characters of string literals should work for any language that supports Unicode too.</p>
+
+        </section>
+    </article>
+</main>
+
+<div style="height: 100px;"></div>
+
+
+        
+            
+        
+
+        
+    </div>
+</body>
+
+</html>

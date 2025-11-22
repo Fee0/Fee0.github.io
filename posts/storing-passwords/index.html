@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<html class="dark light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    
+    
+    
+    <title>
+         How to store passwords
+        
+    </title>
+
+        
+            <meta property="og:title" content="How to store passwords" />
+        
+     
+
+     
+         
+     
+
+     
+         
+    
+
+    
+    
+
+    
+    
+        <link href=https://peukert.io/fonts.css rel="stylesheet" />
+    
+
+    
+    
+
+    
+    
+        <script src=https://peukert.io/js/codeblock.js></script>
+    
+
+    
+    
+    
+    
+    
+        <script src=https://peukert.io/js/note.js></script>
+    
+
+    
+        
+            <script>
+            MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+              }
+            };
+            </script>
+        
+        <script type="text/javascript" id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Frederik Peukert" href="https://peukert.io/atom.xml">
+
+
+    
+    
+        <link rel="stylesheet" type="text/css" href="https://peukert.io/theme/dark.css" />
+    
+
+    <!-- Set the correct theme in the script -->
+    <script src=https://peukert.io/js/themetoggle.js></script>
+    
+        <script>setTheme("dark");</script>
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href=https://peukert.io/main.css />
+
+    
+</head>
+
+
+<body>
+    <div class="content">
+        <header>
+    <div class="main">
+        <a href=https:&#x2F;&#x2F;peukert.io>Frederik Peukert</a>
+
+        <div class="socials">
+            
+            <a rel="me" href="mailto:frederik@peukert.io" class="social">
+                <img alt=email src=https://peukert.io/social_icons/email.svg>
+            </a>
+            
+        </div>
+    </div>
+
+    <nav>
+        
+        <a href=https://peukert.io/posts style="margin-left: 0.5em">posts</a>
+        
+        <a href=https://peukert.io style="margin-left: 0.5em">about</a>
+        
+
+        
+    </nav>
+</header>
+
+
+        
+        
+
+<main>
+    <article>
+        <div class="title">
+            
+            
+    <div class="page-header">
+        How to store passwords<span class="primary-color" style="font-size: 1.6em">.</span>
+    </div>
+
+
+                <div class="meta">
+                    
+                        Posted on <time>2025-02-15</time>
+                    
+
+                    
+
+                    
+
+                    
+                    
+
+                    
+                    
+
+                    
+
+                </div>
+        </div>
+
+        
+
+        
+        
+
+        <section class="body">
+            <h1 id="why-store-passwords"><a class="zola-anchor" href="#why-store-passwords" aria-label="Anchor link for: why-store-passwords">Why store passwords?</a></h1>
+<p>Most Apps or services require some form of a user authentication. Knowing which individual user the service is currently talking to provides many benefits. E.g. to store information about the user, store settings or protect the service with rate limits. However, storing passwords carelessly can lead to serious security breaches, exposing user data and even compromise additional services as users tend to use the same password for many services.</p>
+<h1 id="plaintext"><a class="zola-anchor" href="#plaintext" aria-label="Anchor link for: plaintext">Plaintext</a></h1>
+<p>The simplest approach to storing passwords is to store them in plain text. </p>
+<center>
+<table><thead><tr><th>User ID</th><th>Username</th><th>Password</th></tr></thead><tbody>
+<tr><td>1</td><td>Alice</td><td>password123</td></tr>
+<tr><td>2</td><td>Bob</td><td>qwerty</td></tr>
+<tr><td>3</td><td>Charlie</td><td>12345678</td></tr>
+</tbody></table>
+</center>
+<p>A user enters his username and the password and the server compares both against the entries in its database. This might be secure as long as no adversary can ever access the database. But, any malicious access to the database results in all passwords being immediately visible. This is the least secure way to store passwords. Let’s try something better.</p>
+<h1 id="encrypted"><a class="zola-anchor" href="#encrypted" aria-label="Anchor link for: encrypted">Encrypted</a></h1>
+<p>Encrypting the password can hide it from an adversary. </p>
+<center>
+<table><thead><tr><th>User ID</th><th>Username</th><th>Encrypted Password</th></tr></thead><tbody>
+<tr><td>1</td><td>Alice</td><td>7c97...</td></tr>
+<tr><td>2</td><td>Bob</td><td>c881...</td></tr>
+<tr><td>3</td><td>Charlie</td><td>4ad4...</td></tr>
+</tbody></table>
+</center>
+<p>However, they key to decrypt the passwords must be available somewhere as it is required for each login. It’s not unlikely that an adversary can access the key too which makes it trivial to show all passwords in plaintext again. The key and ability to to decrypt are problematic in this scenario.</p>
+<h1 id="hashing"><a class="zola-anchor" href="#hashing" aria-label="Anchor link for: hashing">Hashing</a></h1>
+<p>While encryption is a two-way function (encryption and decryption), we don't really need or want the ability to decrypt as we could compared the encrypted passwords and still find a matching password like that. Instead, a <a href="https://en.wikipedia.org/wiki/Hash_function">hash function</a> is designed as a one-way function that is not reversible and therefore does not necessarly need a key either. Now we can simply calculate the digest and store it instead of the password:</p>
+<center>
+<p>SHA2(&quot;password123&quot;) = EF92B778BAFE771E89245B89ECBC08A44A4E166C06659911881F383D4473E94F</p>
+</center>
+<p>Here we are using <a href="https://en.wikipedia.org/wiki/SHA-2">SHA-2</a> as a hash function for every password.</p>
+<center>
+<table><thead><tr><th>User ID</th><th>Username</th><th>Password Hash</th></tr></thead><tbody>
+<tr><td>1</td><td>Alice</td><td>EF92...</td></tr>
+<tr><td>2</td><td>Bob</td><td>65E8...</td></tr>
+<tr><td>3</td><td>Charlie</td><td>EF79...</td></tr>
+</tbody></table>
+</center>
+<p>Thanks to the hash function, there is no easy way back from the message digest to the plain password, except for trying all possible password combinations, hashing them, and comparing the resulting digests.</p>
+<p>However, we still have a human factor: the strength of the password. An adversary could pre generate large tables (<a href="https://de.wikipedia.org/wiki/Rainbow_Table">rainbow tables</a>) of password-hash-combinations for all shorter passwords or for all common passwords. </p>
+<center>
+<table><thead><tr><th>Plaintext</th><th>Hash</th></tr></thead><tbody>
+<tr><td>a</td><td>CA97...</td></tr>
+<tr><td>b</td><td>3E23...</td></tr>
+<tr><td>c</td><td>A3A5...</td></tr>
+<tr><td>..</td><td>...</td></tr>
+<tr><td>password123</td><td>EF92...</td></tr>
+<tr><td>...</td><td>...</td></tr>
+</tbody></table>
+</center>
+<p>All the attacker has to do now is to compare the retrieved hashes against the precomputed hashes in the rainbow tables. Simple passwords can quickly be found like this.</p>
+<h1 id="salting"><a class="zola-anchor" href="#salting" aria-label="Anchor link for: salting">Salting</a></h1>
+<p>Instead of simply hashing the user password, we could prepend a so called random <a href="https://en.wikipedia.org/wiki/Salt_%28cryptography%29">salt</a> to each password before hashing:</p>
+<center>
+<p>SHA2(&quot;1234&quot; + &quot;password123&quot;) = B08EB873685F5DC960FF6229AEA2096BBE82EDD0DEC877D3E94DD3A3491BBB03</p>
+</center>
+<p>Then we store the salt next to the password in the database. </p>
+<center>
+<table><thead><tr><th>User ID</th><th>Username</th><th>Salt</th><th>Password Hash</th></tr></thead><tbody>
+<tr><td>1</td><td>Alice</td><td>512ba9</td><td>B08E...</td></tr>
+<tr><td>2</td><td>Bob</td><td>03fc72</td><td>65E8...</td></tr>
+<tr><td>3</td><td>Charlie</td><td>825ef0</td><td>EF79...</td></tr>
+</tbody></table>
+</center>
+<p>Whenever we get a new password from a login, we prepend the salt, compute the hash, and compare the digests. The salt should be randomly chosen for each user. Then, precomputing rainbow tables becomes inefficient as the salt makes the passwords longer which results in gigantic tables that require terra bytes of storage.</p>
+<h1 id="slow-hash"><a class="zola-anchor" href="#slow-hash" aria-label="Anchor link for: slow-hash">Slow Hash</a></h1>
+<p>However, even without precomputing hashes, an adversary could still try many passwords, prepend the salt and check for a match. Through faster and faster hardware this attack can still find many passwords rather efficiently even without precomputed rainbow tables.</p>
+<p>In order to stop these attacks, the hash processing needs to be forced to slow down. This is why some modern hash functions have parameters to enforce longer computation times. For example, <a href="https://en.wikipedia.org/wiki/Bcrypt">bcrypt</a> takes as input an additional cost parameter that increases the cost of computation. The output includes a version identifier, the cost, the salt and digest in this format:</p>
+<center>
+<p>\$[version]\$[cost]\$[22 character salt][31 character hash]</p>
+</center>
+<p>This digest we can store in the database. Depending on the cost the computation for one hash could take multiple seconds which significantly decreases the amount of passwords that can be guessed by the adversary given the same amount of time.</p>
+<center>
+<table><thead><tr><th>User ID</th><th>Username</th><th>Bcrypt Digest</th></tr></thead><tbody>
+<tr><td>1</td><td>Alice</td><td>\$2a\$15\$Yyeoa/khr3.gIRkkOJdH6.arOyiGR4eklXI1d9acSDMGriAGMaaGu</td></tr>
+<tr><td>2</td><td>Bob</td><td>\$2a\$15\$NJFb8moHVvRuItbxxlm31eYNPhGYd/o2hWgCtyDIzW80Kn1LNMGgq</td></tr>
+<tr><td>3</td><td>Charlie</td><td>\$2a\$15\$32zu6pIGsvNRQ5I7QJpf4OIFVlTgE2riKBDAhwISt6x3GT9NWFAhC</td></tr>
+</tbody></table>
+</center>
+<h1 id="no-password"><a class="zola-anchor" href="#no-password" aria-label="Anchor link for: no-password">No password</a></h1>
+<p>Even though we made it very difficult for an adversary to get to the user passwords, they can still start to guess passwords. So, instead of storing passwords at all for a service it might useful to let authentication be handled by a trusted identity provider. Authentication is no longer handled by the service itself but by some provider like Google or Microsoft which store the passwords and allow you to log in into many different services with one <a href="https://en.wikipedia.org/wiki/Single_sign-on">Single Sign-On (SSO)</a>.</p>
+
+        </section>
+    </article>
+</main>
+
+<div style="height: 100px;"></div>
+
+
+        
+            
+        
+
+        
+    </div>
+</body>
+
+</html>

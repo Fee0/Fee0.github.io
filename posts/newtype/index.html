@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<html class="dark light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    
+    
+    
+    <title>
+         Matching newtypes in function parameters
+        
+    </title>
+
+        
+            <meta property="og:title" content="Matching newtypes in function parameters" />
+        
+     
+
+     
+         
+     
+
+     
+         
+    
+
+    
+    
+
+    
+    
+        <link href=https://peukert.io/fonts.css rel="stylesheet" />
+    
+
+    
+    
+
+    
+    
+        <script src=https://peukert.io/js/codeblock.js></script>
+    
+
+    
+    
+    
+    
+    
+        <script src=https://peukert.io/js/note.js></script>
+    
+
+    
+        
+            <script>
+            MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+              }
+            };
+            </script>
+        
+        <script type="text/javascript" id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Frederik Peukert" href="https://peukert.io/atom.xml">
+
+
+    
+    
+        <link rel="stylesheet" type="text/css" href="https://peukert.io/theme/dark.css" />
+    
+
+    <!-- Set the correct theme in the script -->
+    <script src=https://peukert.io/js/themetoggle.js></script>
+    
+        <script>setTheme("dark");</script>
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href=https://peukert.io/main.css />
+
+    
+</head>
+
+
+<body>
+    <div class="content">
+        <header>
+    <div class="main">
+        <a href=https:&#x2F;&#x2F;peukert.io>Frederik Peukert</a>
+
+        <div class="socials">
+            
+            <a rel="me" href="mailto:frederik@peukert.io" class="social">
+                <img alt=email src=https://peukert.io/social_icons/email.svg>
+            </a>
+            
+        </div>
+    </div>
+
+    <nav>
+        
+        <a href=https://peukert.io/posts style="margin-left: 0.5em">posts</a>
+        
+        <a href=https://peukert.io style="margin-left: 0.5em">about</a>
+        
+
+        
+    </nav>
+</header>
+
+
+        
+        
+
+<main>
+    <article>
+        <div class="title">
+            
+            
+    <div class="page-header">
+        Matching newtypes in function parameters<span class="primary-color" style="font-size: 1.6em">.</span>
+    </div>
+
+
+                <div class="meta">
+                    
+                        Posted on <time>2025-02-20</time>
+                    
+
+                    
+
+                    
+
+                    
+                    
+
+                    
+                    
+
+                    
+
+                </div>
+        </div>
+
+        
+
+        
+        
+
+        <section class="body">
+            <p>Here a little &quot;trick&quot; I learned way too late which polluted a lot of my code with <code>.0</code>, <code>.inner()</code>, etc.
+The <a href="https://doc.rust-lang.org/rust-by-example/generics/new_types.html">newtype</a> pattern is quite common in rust to guarantee that the right type is used.</p>
+<p>E.g. this example prevents the possibility of adding a <code>UserId</code> to an <code>OrderId</code> even though adding two <code>u64</code> is totally fine, the semantics make no sense.</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">UserId</span><span>(</span><span style="color:#ff7733;">u64</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">OrderId</span><span>(</span><span style="color:#ff7733;">u64</span><span>)</span><span style="color:#bfbab0cc;">;
+</span></code></pre>
+<p>However, now you have to to choose between writing <code>id.0</code> all the time, create a new function that returns the inner type like <code>id.inner()</code>, or implement the <code>deref/derefMut</code> traits. </p>
+<p>Writing <code>.0</code> or <code>.inner()</code> all the times gets annoying very quickly and does not make the code look any better:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">fn </span><span style="color:#ffb454;">work_with_id</span><span>(</span><span style="color:#f29718;">id</span><span style="color:#bfbab0cc;">:</span><span> UserId) {
+</span><span>    </span><span style="color:#f07178;">println!</span><span>(</span><span style="color:#c2d94c;">&quot;The id is: </span><span style="color:#f29718;">{}</span><span style="color:#c2d94c;">&quot;</span><span style="color:#bfbab0cc;">,</span><span> id</span><span style="color:#f29668;">.</span><span style="color:#f29718;">0</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span>    
+</span><span>    </span><span style="color:#ff7733;">if</span><span> id</span><span style="color:#f29668;">.</span><span style="color:#f29718;">0 </span><span style="color:#f29668;">&gt; </span><span style="color:#f29718;">123 </span><span>{
+</span><span>        </span><span style="color:#ff7733;">let</span><span> id2 </span><span style="color:#f29668;">=</span><span> id</span><span style="color:#f29668;">.</span><span style="color:#f29718;">0 </span><span style="color:#f29668;">+ </span><span style="color:#f29718;">1</span><span style="color:#bfbab0cc;">;
+</span><span>    }
+</span><span>    
+</span><span>    </span><span style="color:#ff7733;">match</span><span> id</span><span style="color:#f29668;">.</span><span style="color:#f29718;">0 </span><span>{
+</span><span>        </span><span style="color:#f29668;">_ =&gt; </span><span style="color:#f29718;">2
+</span><span>    }</span><span style="color:#bfbab0cc;">;
+</span><span>}
+</span></code></pre>
+<p>However, Implementing <code>deref</code> would be consider bad practice as it's not designed for that use case but rather exclusively for <a href="https://doc.rust-lang.org/std/ops/trait.Deref.html">smart pointers</a> because the <em>deref coercion</em> can be unexpected and it exposes all of the underlying types methods and fields. </p>
+<p>Does it make sense to have a method <code>rotate_right()</code> for an <code>u64</code>. Yes. Does it make sense for an <code>UserId</code>? Probably not so much.</p>
+<p>So what can we do?
+It turns out pattern matching does not only work for <code>if-let</code> and <code>match</code> statements but also in functions parameters. This is an easy way to destructure the newtype already in the parameters, so there is no more <code>0.1</code> inside the function body:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">fn </span><span style="color:#ffb454;">print_id</span><span>(UserId(</span><span style="color:#f29718;">id</span><span>): UserId) {
+</span><span>    </span><span style="color:#f07178;">println!</span><span>(</span><span style="color:#c2d94c;">&quot;The id is: </span><span style="color:#f29718;">{}</span><span style="color:#c2d94c;">&quot;</span><span style="color:#bfbab0cc;">,</span><span> id)</span><span style="color:#bfbab0cc;">;
+</span><span>}
+</span></code></pre>
+<p>However, this makes of course only sense if the newtype cannot be confused in the functions body with another type. If we destructure the <code>UserId</code> and <code>OrderId</code> in a functions parameter list and then handle both types in the function body, we basically worked in a circle as we simply undo the newtypes benefits.</p>
+
+        </section>
+    </article>
+</main>
+
+<div style="height: 100px;"></div>
+
+
+        
+            
+        
+
+        
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<html class="dark light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    
+    
+    
+    <title>
+         AES-CBC: How to not shoot yourself in the foot
+        
+    </title>
+
+        
+            <meta property="og:title" content="AES-CBC: How to not shoot yourself in the foot" />
+        
+     
+
+     
+         
+     
+
+     
+         
+    
+
+    
+    
+
+    
+    
+        <link href=https://peukert.io/fonts.css rel="stylesheet" />
+    
+
+    
+    
+
+    
+    
+        <script src=https://peukert.io/js/codeblock.js></script>
+    
+
+    
+    
+    
+    
+    
+        <script src=https://peukert.io/js/note.js></script>
+    
+
+    
+        
+            <script>
+            MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+              }
+            };
+            </script>
+        
+        <script type="text/javascript" id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Frederik Peukert" href="https://peukert.io/atom.xml">
+
+
+    
+    
+        <link rel="stylesheet" type="text/css" href="https://peukert.io/theme/dark.css" />
+    
+
+    <!-- Set the correct theme in the script -->
+    <script src=https://peukert.io/js/themetoggle.js></script>
+    
+        <script>setTheme("dark");</script>
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href=https://peukert.io/main.css />
+
+    
+</head>
+
+
+<body>
+    <div class="content">
+        <header>
+    <div class="main">
+        <a href=https:&#x2F;&#x2F;peukert.io>Frederik Peukert</a>
+
+        <div class="socials">
+            
+            <a rel="me" href="mailto:frederik@peukert.io" class="social">
+                <img alt=email src=https://peukert.io/social_icons/email.svg>
+            </a>
+            
+        </div>
+    </div>
+
+    <nav>
+        
+        <a href=https://peukert.io/posts style="margin-left: 0.5em">posts</a>
+        
+        <a href=https://peukert.io style="margin-left: 0.5em">about</a>
+        
+
+        
+    </nav>
+</header>
+
+
+        
+        
+
+<main>
+    <article>
+        <div class="title">
+            
+            
+    <div class="page-header">
+        AES-CBC: How to not shoot yourself in the foot<span class="primary-color" style="font-size: 1.6em">.</span>
+    </div>
+
+
+                <div class="meta">
+                    
+                        Posted on <time>2025-02-19</time>
+                    
+
+                    
+
+                    
+
+                    
+                    
+
+                    
+                    
+
+                    
+
+                </div>
+        </div>
+
+        
+
+        
+        
+
+        <section class="body">
+            <h1 id="intro"><a class="zola-anchor" href="#intro" aria-label="Anchor link for: intro">Intro</a></h1>
+<p>Before the advent of <a href="https://de.wikipedia.org/wiki/Authenticated_Encryption">AEAD</a> modes, there were usually distinct cryptographic primitives for encryption and authentication. When designing protocols engineers were to their own which primitives to use and which to combine, or not to combine. This led to countless errors on the way that totally break security of many services. One often used primitive for encryption is <a href="https://de.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a> in <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#CBC">CBC</a> mode. Unfortunately, this primitive needs some careful considerations and there are multiple way to shoot yourself in the foot.</p>
+<p>Even after reading this post the same old rule applies: </p>
+<blockquote>
+<p>DO NOT IMPLEMENT YOUR OWN CRYPTO! ... or do it only to learn and understand.</p>
+</blockquote>
+<h1 id="authentication"><a class="zola-anchor" href="#authentication" aria-label="Anchor link for: authentication">Authentication</a></h1>
+<p>AES-CBC can provide confidentiality to a message. That’s it. Nothing more. It does not guarantee that a message will arrive like you send it. Maybe some man-in-the-middle (MITM) intercepted the message and cut off half of it. Depending on the messages' content this can be a major flaw.</p>
+<p>Even worse, no authentication can make this block cipher vulnerable to <a href="https://robertheaton.com/2013/07/29/padding-oracle-attack/">padding oracle</a> attacks. A padding oracle attack can be performed if the message needs padding which is usually the case with block ciphers arbitrary length message needs to be supported but the block cipher only works on multiples of its block size. When receiving an encrypted message, the padding needs to be verified by the receiver. Depending on if the padding is valid or invalid the server might response with an error message or a normal response. This error message can now be used to as an Oracle by the attack to provide information about if a message is considered valid. By changing the last block of the message, the adversary can decipher the encrypted message byte-by-byte by using the oracle to validate the modification to the cipher text.</p>
+<p>When using some kind of authentication, over the ciphertext, the integrity can be verified before decryption and a modified ciphertext wouldn't even get to the decryption stage. This is the so called <a href="https://moxie.org/2011/12/13/the-cryptographic-doom-principle.html">doom principle</a>: </p>
+<blockquote>
+<p><em>&quot;If you have to perform any cryptographic operation before verifying the MAC on a message you’ve received, it will somehow inevitably lead to doom.&quot;</em></p>
+</blockquote>
+<h1 id="tag-verification"><a class="zola-anchor" href="#tag-verification" aria-label="Anchor link for: tag-verification">Tag verification</a></h1>
+<p>If authentication is used one common mistake is to introduce timing attacks vulnerabilities when verification the messages' Tag. Exiting the verification process early when a wrong byte is encountered is a common way to introduce such a vulnerability. For example, comparing tags byte-by-byte and exiting on a wrong byte will make the runtime of the function shorter compared to a successful comparison. By measuring the time until a receiver response to a message the valid Tag can be guessed byte-by-byte. Here is an example for a vulnerable C-like verification function.</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">fn </span><span style="color:#ffb454;">verify_tag</span><span>(</span><span style="color:#f29718;">bad_tag</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29668;">&amp;</span><span>[</span><span style="color:#ff7733;">u8</span><span>], </span><span style="color:#f29718;">correct_tag</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29668;">&amp;</span><span>[</span><span style="color:#ff7733;">u8</span><span>]) </span><span style="color:#bfbab0cc;">-&gt; </span><span style="color:#ff7733;">bool </span><span>{
+</span><span>    </span><span style="color:#ff7733;">for</span><span> i </span><span style="color:#f29668;">in </span><span style="color:#f29718;">0</span><span style="color:#f29668;">..</span><span>bad_tag</span><span style="color:#f29668;">.</span><span style="color:#f07178;">len</span><span>() {
+</span><span>        </span><span style="color:#ff7733;">if</span><span> bad_tag[i] </span><span style="color:#f29668;">!=</span><span> correct_tag[i] {
+</span><span>            </span><span style="font-style:italic;color:#5c6773;">// Early exit leaks timing information!
+</span><span>            </span><span style="color:#ff7733;">return </span><span style="color:#f29718;">false</span><span style="color:#bfbab0cc;">;
+</span><span>        }
+</span><span>    }
+</span><span>    </span><span style="color:#f29718;">true
+</span><span>}
+</span></code></pre>
+<p>However, in modern languages like Rust, it might not be that obvious what is actually happening because operators are overloaded:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">fn </span><span style="color:#ffb454;">verify_tag</span><span>(</span><span style="color:#f29718;">bad_tag</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29668;">&amp;</span><span>[</span><span style="color:#ff7733;">u8</span><span>], </span><span style="color:#f29718;">correct_tag</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29668;">&amp;</span><span>[</span><span style="color:#ff7733;">u8</span><span>]) </span><span style="color:#bfbab0cc;">-&gt; </span><span style="color:#ff7733;">bool </span><span>{
+</span><span>    </span><span style="font-style:italic;color:#5c6773;">// NOT constant-time!
+</span><span>    bad_tag </span><span style="color:#f29668;">==</span><span> correct_tag
+</span><span>}
+</span></code></pre>
+<p>Usually, there are libraries which provide constant time functionality:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">use </span><span>subtle</span><span style="color:#f29668;">::</span><span>ConstantTimeEq</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span style="color:#ff7733;">fn </span><span style="color:#ffb454;">verify_tag</span><span>(</span><span style="color:#f29718;">bad_tag</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29668;">&amp;</span><span>[</span><span style="color:#ff7733;">u8</span><span>], </span><span style="color:#f29718;">correct_tag</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29668;">&amp;</span><span>[</span><span style="color:#ff7733;">u8</span><span>]) </span><span style="color:#bfbab0cc;">-&gt; </span><span style="color:#ff7733;">bool </span><span>{
+</span><span>    bad_tag</span><span style="color:#f29668;">.</span><span style="color:#f07178;">ct_eq</span><span>(correct_tag)</span><span style="color:#f29668;">.</span><span style="color:#f07178;">into</span><span>()
+</span><span>}
+</span></code></pre>
+<h1 id="iv"><a class="zola-anchor" href="#iv" aria-label="Anchor link for: iv">IV</a></h1>
+<p>CBC mode uses an <a href="https://en.wikipedia.org/wiki/Initialization_vector">IV</a> (Initialization Vector). The IV not secret and can be transmitted alongside the message in plain text. However, then it must be included authentication. Otherwise, an adversary can freely manipulate the first plaintext block through manipulating the IV. </p>
+<p>The IV is used to make every message appear different, even when it’s the same plain text and key. Therefore, the IV must be completely indistinguishable from randomness for every message under the same key. Simple operations like incrementing the IV are not enough.</p>
+<h1 id="end"><a class="zola-anchor" href="#end" aria-label="Anchor link for: end">End</a></h1>
+<p>It is possible to implement AES-CBC in a secure way, but there are pitfalls even when stiching together secure cryptographic primitives. Modern AEAD protocols (e.g. <a href="https://en.wikipedia.org/wiki/AES-GCM-SIV">AES-GCM-SIV</a>) specify battle tested ways of combining encryption and authentication primitives and prevent many footguns by design.</p>
+
+        </section>
+    </article>
+</main>
+
+<div style="height: 100px;"></div>
+
+
+        
+            
+        
+
+        
+    </div>
+</body>
+
+</html>

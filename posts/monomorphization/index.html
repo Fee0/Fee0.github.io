@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<html class="dark light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    
+    
+    
+    <title>
+         Monomorphization in Rust
+        
+    </title>
+
+        
+            <meta property="og:title" content="Monomorphization in Rust" />
+        
+     
+
+     
+         
+     
+
+     
+         
+    
+
+    
+    
+
+    
+    
+        <link href=https://peukert.io/fonts.css rel="stylesheet" />
+    
+
+    
+    
+
+    
+    
+        <script src=https://peukert.io/js/codeblock.js></script>
+    
+
+    
+    
+    
+    
+    
+        <script src=https://peukert.io/js/note.js></script>
+    
+
+    
+        
+            <script>
+            MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+              }
+            };
+            </script>
+        
+        <script type="text/javascript" id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Frederik Peukert" href="https://peukert.io/atom.xml">
+
+
+    
+    
+        <link rel="stylesheet" type="text/css" href="https://peukert.io/theme/dark.css" />
+    
+
+    <!-- Set the correct theme in the script -->
+    <script src=https://peukert.io/js/themetoggle.js></script>
+    
+        <script>setTheme("dark");</script>
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href=https://peukert.io/main.css />
+
+    
+</head>
+
+
+<body>
+    <div class="content">
+        <header>
+    <div class="main">
+        <a href=https:&#x2F;&#x2F;peukert.io>Frederik Peukert</a>
+
+        <div class="socials">
+            
+            <a rel="me" href="mailto:frederik@peukert.io" class="social">
+                <img alt=email src=https://peukert.io/social_icons/email.svg>
+            </a>
+            
+        </div>
+    </div>
+
+    <nav>
+        
+        <a href=https://peukert.io/posts style="margin-left: 0.5em">posts</a>
+        
+        <a href=https://peukert.io style="margin-left: 0.5em">about</a>
+        
+
+        
+    </nav>
+</header>
+
+
+        
+        
+
+<main>
+    <article>
+        <div class="title">
+            
+            
+    <div class="page-header">
+        Monomorphization in Rust<span class="primary-color" style="font-size: 1.6em">.</span>
+    </div>
+
+
+                <div class="meta">
+                    
+                        Posted on <time>2024-11-10</time>
+                    
+
+                    
+
+                    
+
+                    
+                    
+
+                    
+                    
+
+                    
+
+                </div>
+        </div>
+
+        
+
+        
+        
+
+        <section class="body">
+            <h1 id="generics-and-monomorphization"><a class="zola-anchor" href="#generics-and-monomorphization" aria-label="Anchor link for: generics-and-monomorphization">Generics and Monomorphization</a></h1>
+<p>Many languages offer generics, which provide a lot of convenience: There is no need to duplicate lots of code. While generics look similar in different language specifications, they might use different approaches for a specific implementation. In the case of Rust, generics go through a process called <em>Monomorphization</em>.</p>
+<p>Monomorphization is the process of generating specialized versions of generic code for each concrete type used. So, whenever a concrete type is used to instantiate generic code, a new copy of all the code that uses the generic is created. For example, we have a function with a generic parameter <code>T</code>:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">fn </span><span style="color:#ffb454;">print</span><span>&lt;T</span><span style="color:#bfbab0cc;">: </span><span style="font-style:italic;color:#39bae6;">ToString</span><span>&gt;(</span><span style="color:#f29718;">value</span><span style="color:#bfbab0cc;">:</span><span> T) {
+</span><span>    </span><span style="color:#f07178;">println!</span><span>(</span><span style="color:#c2d94c;">&quot;</span><span style="color:#f29718;">{}</span><span style="color:#c2d94c;">&quot;</span><span style="color:#bfbab0cc;">,</span><span> value</span><span style="color:#f29668;">.</span><span style="color:#f07178;">to_string</span><span>())
+</span><span>}
+</span></code></pre>
+<p>Now, we call the function with specific types. The compiler knows that it needs to create two instances of <code>print</code> for three different types: <code>&amp;str</code>, <code>u8</code>, and <code>i32</code>.</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">pub fn </span><span style="color:#ffb454;">main</span><span>() {
+</span><span>    </span><span style="color:#f07178;">print</span><span>(</span><span style="color:#c2d94c;">&quot;abc&quot; </span><span style="color:#f29668;">as &amp;</span><span style="color:#ff7733;">str</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span>    </span><span style="color:#f07178;">print</span><span>(</span><span style="color:#f29718;">123 </span><span style="color:#f29668;">as </span><span style="color:#ff7733;">u8</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span>    </span><span style="color:#f07178;">print</span><span>(</span><span style="color:#c2d94c;">&#39;A&#39; </span><span style="color:#f29668;">as </span><span style="color:#ff7733;">char</span><span>)</span><span style="color:#bfbab0cc;">;
+</span><span>}
+</span></code></pre>
+<p>In this case, the compiler creates three copies of the function like this:</p>
+<p>$~$</p>
+<p><img src="../../graphics/a.png" alt="Monomorphization" /></p>
+<center>
+Language specification vs. implementation
+</center>
+<p>Monomorphization has different consequences. The most important benefit of this implementation is that the exact type of every function is statically known and the compiler can use all its optimizations to improve the runtime performance of the code. There is also no distinction on which function needs to be called, as every call for a specific type gets a call to its own instance of the function. So, no additional runtime checks are needed.</p>
+<p>However, there are also some drawbacks. Copying the code will result in a bigger binary. Depending on the size of the function and the number of invocations with different types, this can cause the binary size to explode. The copying step will also increase the compile time. Further, cache efficiency will suffer as there is not one function anymore but many that are potentially also scattered in memory. Lastly, this approach requires that all users of the generic type are known at compile time. This is a problem e.g., if generic code is supposed to be exported from a shared library. The user of the shared library might now want to use the generic with a type where no instance exists. That's why generics in exported functions are generally not supported.</p>
+<p>Different crates also create their own instances of generics. That means crate <code>A</code> and crate <code>B</code> can both instantiate a <code>Vec&lt;String&gt;</code> which would create two copies even though the type is the same. This problem was partially solved with the introduction of <a href="https://github.com/rust-lang/rust/issues/47317">shared generics</a> where monomorphized code can be shared between crates.</p>
+<p>$~$</p>
+<!-- <div style="margin-left: 25%; margin-right: auto;"> -->
+<div align="center">
+<table><thead><tr><th>Con</th><th>Pro</th></tr></thead><tbody>
+<tr><td>Binary size</td><td>Compiler optimizations</td></tr>
+<tr><td>Compile time</td><td>No dynamic dispatch</td></tr>
+<tr><td>Cache efficiency</td><td></td></tr>
+<tr><td>Cannot be exported</td><td></td></tr>
+</tbody></table>
+<!-- <center> -->
+<p>Pros and cons</p>
+<!-- </center> -->
+</div>
+<p>As with most optimizations, it’s mostly a tradeoff between memory size and runtime performance.</p>
+<h1 id="trick"><a class="zola-anchor" href="#trick" aria-label="Anchor link for: trick">Trick</a></h1>
+<p>Monomorphization can drastically increase the size of the binary. But, most of the impact can be avoided by redesigning the generic code to separate the code that handles the generic part and the rest of the code that deals with ordinary data types. This trick can be seen inside the standard library as well. For example in <code>std::path::with_extension()</code>:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">pub fn </span><span style="color:#ffb454;">with_extension</span><span>&lt;S</span><span style="color:#bfbab0cc;">: </span><span style="font-style:italic;color:#39bae6;">AsRef</span><span>&lt;OsStr&gt;&gt;(</span><span style="color:#f29668;">&amp;</span><span style="color:#f29718;">self</span><span>, </span><span style="color:#f29718;">extension</span><span style="color:#bfbab0cc;">:</span><span> S) </span><span style="color:#bfbab0cc;">-&gt;</span><span> PathBuf {
+</span><span>    </span><span style="font-style:italic;color:#39bae6;">self</span><span style="color:#f29668;">.</span><span style="color:#f07178;">_with_extension</span><span>(extension</span><span style="color:#f29668;">.</span><span style="color:#f07178;">as_ref</span><span>())
+</span><span>}
+</span><span>
+</span><span style="color:#ff7733;">fn </span><span style="color:#ffb454;">_with_extension</span><span>(</span><span style="color:#f29668;">&amp;</span><span style="color:#f29718;">self</span><span>, </span><span style="color:#f29718;">extension</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29668;">&amp;</span><span>OsStr) </span><span style="color:#bfbab0cc;">-&gt;</span><span> PathBuf {
+</span><span>    </span><span style="font-style:italic;color:#5c6773;">// complex function ...
+</span><span>}
+</span></code></pre>
+<p>The generic code is encapsulated in <code>with_extension()</code> and gets resolved into a concrete data type. This type can be used to call the complex part of the function that resides inside another function. In this case, the compiler can only use monomorphization for <code>with_extension()</code> and does not need to copy <code>_with_extension</code>. However, the compiler may choose to inline functions which could revert the effects of separating generic and non-generic code. Therefore, <code>#[inline(never)]</code> can help to tell the compiler to not inline a function.</p>
+<h1 id="tracking"><a class="zola-anchor" href="#tracking" aria-label="Anchor link for: tracking">Tracking</a></h1>
+<p>It might be useful to track how many copies of a function exist. A useful tool for this is for example <a href="https://github.com/dtolnay/cargo-llvm-lines">llvm-lines</a> which allows to see the number of copies, as well as their size. Using the example of the <a href="https://peukert.io/posts/monomorphization/#generics-and-monomorphization">generic print function</a> we can see the three copies created, one for each argument.</p>
+<pre style="background-color:#0f1419;color:#bfbab0;"><code><span>▶ cargo llvm-lines --release
+</span><span>
+</span><span>  Lines               Copies            Function name
+</span><span>  -----               ------            -------------
+</span><span>  2026                54                (TOTAL)
+</span><span>   303 (15.0%, 15.0%)  1 (1.9%,  1.9%)  alloc::raw_vec::RawVecInner&lt;A&gt;::grow_amortized
+</span><span>   282 (13.9%, 28.9%)  1 (1.9%,  3.7%)  alloc::alloc::Global::grow_impl
+</span><span>   158 (7.8%, 36.7%)   1 (1.9%,  5.6%)  alloc::raw_vec::RawVecInner&lt;A&gt;::try_allocate_in
+</span><span>   143 (7.1%, 43.7%)   3 (5.6%, 11.1%)  monomorphization::print
+</span><span>   ...
+</span></code></pre>
+
+        </section>
+    </article>
+</main>
+
+<div style="height: 100px;"></div>
+
+
+        
+            
+        
+
+        
+    </div>
+</body>
+
+</html>
