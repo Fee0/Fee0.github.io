@@ -1,5 +1,5 @@
 +++
-title = "Hiding code inside identifier"
+title = "Hiding code inside identifiers"
 description = "Using Unicode variation selectors to hide arbitrary data — even runnable JavaScript — inside a single character or variable name, completely invisibly."
 date = "2025-02-21"
 keywords = ["javascript","variation","selector","unicode","hack","hiding","identifier"]
@@ -110,7 +110,7 @@ function decode(input) {
 }
 ```
 
-The ``decode()`` function will skip the first base character and then decode variation selectors as long as there is no non-variation-selector. The output is a byte array which we convert back into a string with ``String.FromCharCode()``:
+The ``decode()`` function will skip the first base character and then decode variation selectors as long as there is no non-variation-selector. The output is a byte array which we convert back into a string with ``String.fromCharCode()``:
 
 ```javascript
 let bytes = decode(emoji);
@@ -125,10 +125,10 @@ let bytes = decode(emoji);
 eval(String.fromCharCode(...bytes))
 ```
 
-This is cool because we can hide now arbitrary amounts of code inside single characters and at runtime we can decode and execute it again. 
+This is cool because we can now hide arbitrary amounts of code inside single characters and at runtime we can decode and execute it again. 
 
-# Embedding hidden data in identifier
-JavaScript does not only support Unicode in Strings but also for identifiers.
+# Embedding hidden data in identifiers
+JavaScript does not only support Unicode in strings but also in identifiers.
 Let’s choose a random character where we hide the JavaScript and print it:
 
 ```javascript
@@ -145,5 +145,5 @@ let bytes = decode(varName);
 eval(String.fromCharCode(...bytes)); // prints: "hello hidden world!"
 ```
 
-This will print ``"hello hidden world!"`` which means we can hide arbitrary amount of JavaScript inside identifiers. This should work for other script languages too that allow to access variable names and allow Unicode in identifiers. Hiding code inside characters of string literals should work for any language that supports Unicode too.
+This will print ``"hello hidden world!"`` which means we can hide an arbitrary amount of JavaScript inside identifiers. This should work for other scripting languages too that allow accessing variable names and allow Unicode in identifiers. Hiding code inside characters of string literals should work for any language that supports Unicode too.
 

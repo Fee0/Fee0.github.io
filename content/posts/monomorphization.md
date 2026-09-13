@@ -21,7 +21,7 @@ fn print<T: ToString>(value: T) {
 }
 ```
 
-Now, we call the function with specific types. The compiler knows that it needs to create two instances of `print` for three different types: `&str`, `u8`, and `i32`.
+Now, we call the function with specific types. The compiler knows that it needs to create three instances of `print` for three different types: `&str`, `u8`, and `char`.
 
 ```rust,
 pub fn main() {
@@ -43,7 +43,7 @@ Language specification vs. implementation
 
 Monomorphization has different consequences. The most important benefit of this implementation is that the exact type of every function is statically known and the compiler can use all its optimizations to improve the runtime performance of the code. There is also no distinction on which function needs to be called, as every call for a specific type gets a call to its own instance of the function. So, no additional runtime checks are needed.
 
-However, there are also some drawbacks. Copying the code will result in a bigger binary. Depending on the size of the function and the number of invocations with different types, this can cause the binary size to explode. The copying step will also increase the compile time. Further, cache efficiency will suffer as there is not one function anymore but many that are potentially also scattered in memory. Lastly, this approach requires that all users of the generic type are known at compile time. This is a problem e.g., if generic code is supposed to be exported from a shared library. The user of the shared library might now want to use the generic with a type where no instance exists. That's why generics in exported functions are generally not supported.
+However, there are also some drawbacks. Copying the code will result in a bigger binary. Depending on the size of the function and the number of invocations with different types, this can cause the binary size to explode. The copying step will also increase the compile time. Further, cache efficiency will suffer as there is not one function anymore but many that are potentially also scattered in memory. Lastly, this approach requires that all users of the generic type are known at compile time. This is a problem, e.g., if generic code is supposed to be exported from a shared library. The user of the shared library might want to use the generic with a type for which no instance exists. That's why generics in exported functions are generally not supported.
 
 Different crates also create their own instances of generics. That means crate `A` and crate `B` can both instantiate a `Vec<String>` which would create two copies even though the type is the same. This problem was partially solved with the introduction of [shared generics](https://github.com/rust-lang/rust/issues/47317) where monomorphized code can be shared between crates.
 
