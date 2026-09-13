@@ -1,5 +1,6 @@
 +++
 title = "Monomorphization in Rust"
+description = "How Rust implements generics through monomorphization: the performance wins, the binary-size and compile-time costs, and a trick to keep code bloat down."
 date = "2024-11-10"
 keywords = ["Monomorphization","Rust","trick"]
 

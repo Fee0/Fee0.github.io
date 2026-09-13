@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {%- for sitemap_entry in entries %}
+    {%- if not (sitemap_entry.permalink is ending_with("/page/1/")) %}
+    <url>
+        <loc>{{ sitemap_entry.permalink | escape_xml | safe }}</loc>
+        {%- if sitemap_entry.updated %}
+        <lastmod>{{ sitemap_entry.updated }}</lastmod>
+        {%- endif %}
+        {%- if sitemap_entry.extra and sitemap_entry.extra.sitemap_priority %}
+        <priority>{{ sitemap_entry.extra.sitemap_priority }}</priority>
+        {%- endif %}
+    </url>
+    {%- endif %}
+    {%- endfor %}
+</urlset>

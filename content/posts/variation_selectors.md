@@ -1,5 +1,6 @@
 +++
 title = "Hiding code inside identifier"
+description = "Using Unicode variation selectors to hide arbitrary data — even runnable JavaScript — inside a single character or variable name, completely invisibly."
 date = "2025-02-21"
 keywords = ["javascript","variation","selector","unicode","hack","hiding","identifier"]
 
