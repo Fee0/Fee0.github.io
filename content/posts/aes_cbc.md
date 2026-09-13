@@ -10,7 +10,7 @@ comment = false
 +++
 
 # Intro
-Before the advent of [AEAD](https://de.wikipedia.org/wiki/Authenticated_Encryption) modes, there were usually distinct cryptographic primitives for encryption and authentication. When designing protocols, engineers were left on their own to decide which primitives to use and which to combine, or not to combine. This led to countless errors along the way that totally broke the security of many services. One often used primitive for encryption is [AES](https://de.wikipedia.org/wiki/Advanced_Encryption_Standard) in [CBC](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#CBC) mode. Unfortunately, this primitive needs some careful consideration and there are multiple ways to shoot yourself in the foot.
+Before the advent of [AEAD](https://en.wikipedia.org/wiki/Authenticated_encryption) modes, there were usually distinct cryptographic primitives for encryption and authentication. When designing protocols, engineers were left on their own to decide which primitives to use and which to combine, or not to combine. This led to countless errors along the way that totally broke the security of many services. One often used primitive for encryption is [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) in [CBC](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#CBC) mode. Unfortunately, this primitive needs some careful consideration and there are multiple ways to shoot yourself in the foot.
 
 Even after reading this post the same old rule applies: 
 > DO NOT IMPLEMENT YOUR OWN CRYPTO! ... or do it only to learn and understand.

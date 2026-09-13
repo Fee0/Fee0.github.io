@@ -64,7 +64,7 @@ Here we are using [SHA-2](https://en.wikipedia.org/wiki/SHA-2) as a hash functio
 
 Thanks to the hash function, there is no easy way back from the message digest to the plain password, except for trying all possible password combinations, hashing them, and comparing the resulting digests.
 
-However, we still have a human factor: the strength of the password. An adversary could pre-generate large tables ([rainbow tables](https://de.wikipedia.org/wiki/Rainbow_Table)) of password-hash combinations for all shorter passwords or for all common passwords. 
+However, we still have a human factor: the strength of the password. An adversary could pre-generate large tables ([rainbow tables](https://en.wikipedia.org/wiki/Rainbow_table)) of password-hash combinations for all shorter passwords or for all common passwords. 
 
 <center>
 
