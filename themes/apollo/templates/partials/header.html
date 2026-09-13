@@ -5,6 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    {# Canonical URL — collapses duplicates (paginated pages point at the section root) #}
+    {% if page.permalink %}
+        <link rel="canonical" href="{{ page.permalink | safe }}" />
+        <meta property="og:url" content="{{ page.permalink | safe }}" />
+        <meta property="og:type" content="article" />
+    {% elif section.permalink %}
+        <link rel="canonical" href="{{ section.permalink | safe }}" />
+        <meta property="og:url" content="{{ section.permalink | safe }}" />
+        <meta property="og:type" content="website" />
+    {% elif current_url %}
+        <link rel="canonical" href="{{ current_url | safe }}" />
+        <meta property="og:url" content="{{ current_url | safe }}" />
+        <meta property="og:type" content="website" />
+    {% endif %}
+
     {% if page.extra.meta %}
          <!-- the meta data config goes here  -->
          {% for data in page.extra.meta %}

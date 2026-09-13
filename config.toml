@@ -4,6 +4,7 @@
 base_url = "https://peukert.io"
 
 title = "Frederik Peukert"
+description = "Frederik Peukert — software engineer in Stuttgart writing about security, cryptography, Rust, and low-level programming."
 generate_feeds = true
 compile_sass = true
 

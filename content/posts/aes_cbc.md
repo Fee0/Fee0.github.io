@@ -1,6 +1,6 @@
 +++
 title = "AES-CBC: How to not shoot yourself in the foot"
-#description = "How to use AES-CBC without shooting yourself in the foot"
+description = "The common footguns of AES-CBC: why encryption alone isn't enough, plus padding oracle and timing attacks, IV handling, and why AEAD modes are safer."
 keywords = ["AES","CBC","AEAD","Attack","Padding","cryptographie","crypto","encryption","authentication","IV"]
 date = "2025-02-19"
 

@@ -1,5 +1,6 @@
 +++
 title = "Matching newtypes in function parameters"
+description = "A small Rust trick: destructure newtypes like UserId(u64) directly in function parameters to avoid scattering .0 and .inner() calls across your code."
 date = "2025-02-20"
 keywords = ["newtype","Rust","trick"]
 

@@ -1,5 +1,6 @@
 +++
 title = "How to store passwords"
+description = "A step-by-step guide to storing passwords securely: from plaintext and encryption to hashing, salting, slow hashes like bcrypt, and passwordless SSO."
 date = "2025-02-15"
 keywords = ["password","store","encryption","hash","salt","bcrypt","sso"]
 
