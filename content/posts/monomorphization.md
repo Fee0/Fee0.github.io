@@ -9,7 +9,7 @@ repo_view = false
 comment = false
 +++
 
-# Generics and Monomorphization
+## Generics and Monomorphization
 
 Many languages offer generics, which provide a lot of convenience: There is no need to duplicate lots of code. While generics look similar in different language specifications, they might use different approaches for a specific implementation. In the case of Rust, generics go through a process called _Monomorphization_.
 
@@ -35,7 +35,7 @@ In this case, the compiler creates three copies of the function like this:
 
 $~$
 
-![Monomorphization](../../graphics/a.png)
+![Diagram: one generic print function in the source expands into three monomorphized copies, one per argument type](/graphics/a.png)
 
 <center>
 Language specification vs. implementation
@@ -68,7 +68,7 @@ Pros and cons
 
 As with most optimizations, it’s mostly a tradeoff between memory size and runtime performance.
 
-# Trick
+## Trick
 
 Monomorphization can drastically increase the size of the binary. But, most of the impact can be avoided by redesigning the generic code to separate the code that handles the generic part and the rest of the code that deals with ordinary data types. This trick can be seen inside the standard library as well. For example in `std::path::with_extension()`:
 
@@ -84,7 +84,7 @@ fn _with_extension(&self, extension: &OsStr) -> PathBuf {
 
 The generic code is encapsulated in `with_extension()` and gets resolved into a concrete data type. This type can be used to call the complex part of the function that resides inside another function. In this case, the compiler can only use monomorphization for `with_extension()` and does not need to copy `_with_extension`. However, the compiler may choose to inline functions which could revert the effects of separating generic and non-generic code. Therefore, `#[inline(never)]` can help to tell the compiler to not inline a function.
 
-# Tracking
+## Tracking
 
 It might be useful to track how many copies of a function exist. A useful tool for this is for example [llvm-lines](https://github.com/dtolnay/cargo-llvm-lines) which allows to see the number of copies, as well as their size. Using the example of the [generic print function](#generics-and-monomorphization) we can see the three copies created, one for each argument.
 
