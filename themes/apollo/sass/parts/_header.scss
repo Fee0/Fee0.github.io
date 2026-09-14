@@ -2,7 +2,14 @@
     font-size: 2.5em;
     line-height: 100%;
     font-family: var(--header-font);
+    font-weight: normal;
     margin: 4rem 0px 1rem 0px;
+}
+
+/* The page title is an <h1>, but it is not part of the markdown-style
+   heading scale, so it keeps its own look instead of the "#" prefix. */
+.page-header::before {
+    content: none;
 }
 
 .centered-header {

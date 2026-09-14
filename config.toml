@@ -29,6 +29,13 @@ highlight_theme = "ayu-dark"
 # highlight_theme = "classic-modified"
 
 [extra]
+author = "Frederik Peukert"
+
+# Social preview image used for og:image / twitter:image on every page.
+# Set it to a path under static/ (e.g. "graphics/social-card.png") once one exists;
+# individual pages can override it with `image = "..."` in their [extra] table.
+# default_image = ""
+
 toc = false
 theme = "dark"
 fancy_code = true

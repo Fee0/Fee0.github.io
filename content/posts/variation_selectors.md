@@ -9,7 +9,7 @@ repo_view = false
 comment = false
 +++
 
-# Unicode
+## Unicode
 [Unicode](https://www.unicode.org/versions/Unicode16.0.0/UnicodeStandard-16.0.pdf) maps codepoints to characters. E.g., U+0041 -> A. While some characters map directly to one codepoint, some scripts, e.g., Devanagari, require multiple codepoints per character. To accommodate all of the world's writing systems, Unicode includes code points supporting the combination of characters or fine variations of characters in different scripts.
 
 <!-- There are many cool [codepoints](https://github.com/Codepoints/awesome-codepoints).  -->
@@ -23,7 +23,7 @@ console.log(String.fromCodePoint(0x2615, 0xFE0F)); // ☕️ Forces emoji style
 ```
 Variation selectors are supposed to be preserved even if their meaning is unknown to a system in order for Unicode to be backward compatible. Unicode does not seem to define a maximum of variation selectors for one base character either.
 
-# Encoding into Variation Selectors
+## Encoding into Variation Selectors
 Given the properties of variation selectors, we could add arbitrary data to a base character by mapping the data to the different variation selectors. Most systems will carry this unknown data around without modifying it. 
 
 Since we have exactly 256 variation selectors, we can assign a byte value to each selector and use this as a way to encode arbitrary data after each Unicode character. Variation selectors exist in two codepoint ranges: 16 in ``U+FE00`` to ``U+FE0F`` and 240 in ``U+E0100`` to ``U+E01EF``. If we combine both ranges when mapping to byte values, we are going to end up with a mapping like this:
@@ -49,7 +49,7 @@ Mapping Code Points to Bytes
 
 Using this mapping we can encode arbitrary bytes using the different variation selectors. If the variation selectors have no meaning for the base character, there will be no visual indication of our appended data.
 
-# Embedding hidden data in strings
+## Embedding hidden data in strings
 Storing arbitrary data after a character is an interesting property that could have many applications. Maybe the first idea that comes to mind is to use it to send hidden messages like [StegCloack](https://github.com/KuroLabs/stegcloak) is doing. 
 
 However, I wanted to test how variation selectors behave inside programming languages that support Unicode. We are going to use JavaScript for this to encode a message into a character.
@@ -127,7 +127,7 @@ eval(String.fromCharCode(...bytes))
 
 This is cool because we can now hide arbitrary amounts of code inside single characters and at runtime we can decode and execute it again. 
 
-# Embedding hidden data in identifiers
+## Embedding hidden data in identifiers
 JavaScript does not only support Unicode in strings but also in identifiers.
 Let’s choose a random character where we hide the JavaScript and print it:
 

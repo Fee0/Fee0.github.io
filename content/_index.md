@@ -8,7 +8,7 @@ I'm Frederik Peukert, a software engineer in Stuttgart, Germany.
 
 I love security, Rust, and all low-level things :-)
 
-# _Feynman Technique_
+## _Feynman Technique_
 
 I'm writing this blog to learn and organize ideas in my brain more clearly using the [_Feynman Technique_](https://fs.blog/feynman-technique/):
 
