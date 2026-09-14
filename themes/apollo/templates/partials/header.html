@@ -154,7 +154,8 @@
         }
     }
     </script>
-    {% elif current_path == "/" and (section.permalink or page.permalink) %}
+    {% elif current_path == "/" %}
+    {% if section.permalink or page.permalink %}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -169,6 +170,7 @@
         }
     }
     </script>
+    {% endif %}
     {% endif %}
 
     {# Favicon #}
